@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Diagon Alley</title>
+    <link rel="stylesheet" href="./wands.css" />
+    <link rel="icon" type="image/x-icon" href="thun.png">
+  </head>
+  <style></style>
+
+  <body>
+    <div class="main">
+
+      <div id="main_banner">
+        <h1>Diagon Alley</h1>
+      </div>
+
+      <div class="bigMenu">
+
+        <div class="menu_left">
+
+          <div class="menu-item">
+            <a href="hp_clothes2.html" id="a1"> Clothes </a>
+          </div>
+
+          <div class="menu-item">
+            <a href="hp_wands.html" id="a2"> Wands </a>
+          </div>
+
+          <div class="menu-item">
+            <a href="hp_brooms.html" id="a3"> Brooms </a>
+          </div>
+
+          <div class="menu-item">
+            <a href="hp_cart.html" id="a4"> Cart </a>
+          </div>
+
+        </div>
+
+        <div class="menu_right">
+
+          <div class="item_row">
+            
+            <div class="Wand1">
+              <a
+                onclick="addToCart({
+                name: 'Harry Potter Wand',
+                price: 77,
+                image: 'HarryPotter.jpg'
+              })"
+              >
+              <img src="HarryPotter.jpg">
+                    <p>Harry Potter Wand</p>
+                    <p>77 Galleon</p>
+                </a>
+            </div>                        
+
+            <div class="Wand2">
+              <a
+                onclick="addToCart({
+                name: 'Albus Dumbledore Wand',
+                price: 100,
+                image: 'Dumbledore.jpg'
+              })"                
+              >
+              <img src="Dumbledore.jpg">
+              <p>Albus Dumbledore Wand</p>
+              <p>100 Galleon</p>
+              </a>
+            </div>
+
+          </div>
+
+          <div class="item_row">
+
+            <div class="Wand3">
+              <a
+                onclick="addToCart({
+                name: 'Hermione G Wand',
+                price: 60,
+                image: 'Hermione.jpg'
+              })"
+                
+              >
+              <img src="Hermione.jpg">
+              <p>Hermione G Wand</p>
+              <p>60 Galleon</p>
+              </a>
+            </div>
+
+            <div class="Wand4">
+              <a
+                onclick="addToCart({
+                name: 'Ron Weasley Wand',
+                price: 52,
+                image: 'Weasley.jpg'
+              })"
+                
+              >
+              <img src="Weasley.jpg">
+              <p>Ron Weasley Wand</p>
+              <p>52 Galleon</p>
+              </a>
+            </div>
+
+          </div>
+
+          <div class="item_row">
+            <p id="copyR">Copyrightⓒ 2023.Yaewon&Dayeon.All rights reserved.</p>
+          </div>
+
+        </div>
+
+        </div>
+
+        </div>      
+    
+  </body>
+
+  <script>
+     function addItemToExistingCart() {}
+
+function addToCart(item) {
+  let b = confirm("You gon' keep it or what");
+
+  if (b) {
+    //Get existing cart from local storage
+    const existingCart = JSON.parse(
+      localStorage.getItem("harryPotterCart")
+    );
+
+    let updatedCart;
+
+    //If card does not exists (e.g. first item in cart)
+    if (existingCart === null) {
+      //Setup new item to be stored
+      const storedItem = {
+        name: item.name,
+        image: item.image,
+        price: item.price,
+        itemsCount: 1,
+      };
+
+      //Add item to updatedCard variable
+
+      updatedCart = [storedItem];
+    }
+    //Else the cart already exists (e.g. its items 2, 3, 4 etc)
+    else {
+      //Check if item name exists already in cart (e.g. Slytherin Package)
+
+      //This code returns undefined if the item does NOT exists
+      var itemInCart = existingCart.find((obj) => {
+        return obj.name === item.name;
+      });
+
+      //If item name already exists..
+      if (itemInCart) {
+
+        //If item exists, find the index of that item in the cart array
+        const index = existingCart.map((e) => e.name).indexOf(item.name);
+
+        //Update the item count within the object
+        existingCart[index].itemsCount += 1;
+
+        updatedCart = [...existingCart];
+      } else {
+        //Else the item is not in the existing cart, we create brand new object for the first addition of that item
+        const storedItem = {
+          name: item.name,
+          image: item.image,
+          price: item.price,
+          itemsCount: 1,
+        };
+        updatedCart = [...existingCart, storedItem];
+      }
+    }
+
+    // Put the object into storage
+    localStorage.setItem("harryPotterCart", JSON.stringify(updatedCart));
+  }
+}
+  </script>
+</html>
+

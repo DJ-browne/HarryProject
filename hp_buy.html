@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Diagon Alley</title>
+    <link rel="icon" type="image/x-icon" href="thun.png">
+    <style>
+        * {
+
+            font-family: 'Harry P';
+            cursor: url(oth263.cur), auto;
+        }
+
+        body {
+            /* background-color: rgb(244, 177, 236); */
+            background-color: black;
+        }
+
+
+        img {
+            width: 700px;
+            height: auto;
+            
+        }
+
+        .top {
+            margin-top: 5%;
+            margin-bottom: 3%;
+        }
+
+        .main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .button {
+            padding: 1em 1.5em;
+            font-size: 25px;
+            font-weight: bolder;
+            border-radius: 4px;
+            appearance: none;
+            border: none;
+            color: black;
+            letter-spacing: 2px;
+            width: 650px;
+            height: 80px;
+            margin: 0px 30px;
+            
+        }
+
+        .button-first {
+            background: linear-gradient(to right, #e55d87, #5fc3e4);
+            box-shadow: 0 2px 25px rgba(229, 93, 135, 0.5);
+        }
+
+        .button-first:active {
+            background: linear-gradient(to right,
+                    rgba(229, 93, 135, 0.9),
+                    rgba(95, 195, 228, 0.9));
+        }
+
+        .button-second {
+            background: linear-gradient(to right, #1488cc, #2b32b2);
+            box-shadow: 0 2px 25px rgba(20, 137, 204, 0.5);
+        }
+
+        .button-second:active {
+            background: linear-gradient(to right,
+                    rgba(20, 136, 204, 0.9),
+                    rgba(43, 50, 178, 0.9));
+        }
+
+        .button:focus {
+            outline: none;
+        }
+
+        particle {
+            left: 0;
+            top: 0;
+            pointer-events: none;
+            position: fixed;
+            opacity: 0;
+        }
+
+        .frame {
+            margin-top: -200px;
+        }
+
+        /* .frame {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 400px;
+  height: 400px;
+  margin-top: -200px;
+  margin-left: -200px;
+  border-radius: 4px;
+  box-shadow: 4px 8px 16px 0 rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  background: #fff;
+  color: #333;
+  font-family: "Open Sans", Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+} */
+
+        .center {
+            margin-top: 20%;    
+            margin-left: 50%;        
+            transform: translate(-50%, -50%);
+            display: flex;
+            flex-direction: row;
+
+            
+        }
+    </style>
+
+<body>
+    <div class="main">
+
+
+        <div class="top">
+            <div id="lastBit">
+                <div class="buy">
+                        <img title="You are a wizard." src="danielradcliffe.gif"></a>
+                </div>
+            </div>
+        </div>
+
+      
+
+        <div class="frame">
+            <div class="center">
+                <button class="button button-first" onclick="navigateToHomePage()" data-type="square">
+                    💗 Back to home 💗
+                </button>
+                <button class="button button-second" onclick="navigateToCartPage()" data-type="circle">
+                    💗 Back to cart 💗
+                </button>
+            </div>
+        </div>
+
+
+
+
+    </div>
+</body>
+<script>
+    
+
+
+    if (document.body.animate) {
+        document
+            .querySelectorAll(".button")
+            .forEach((button) => button.addEventListener("click", pop));
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+    })
+
+    function navigateToHomePage(){
+        setTimeout(() => {
+            location.href = "Ex03_harrypotter.html"
+        }, 500);
+    }
+    function navigateToCartPage(){
+        setTimeout(() => {
+            location.href = "hp_cart.html"
+        }, 500);
+    }
+
+    function pop(e) {
+        for (let i = 0; i < 30; i++) {
+            createParticle(e.clientX, e.clientY, e.target.dataset.type);
+        }
+    }
+
+    function createParticle(x, y, type) {
+        const particle = document.createElement("particle");
+        document.body.appendChild(particle);
+
+        const size = Math.floor(Math.random() * 20 + 5);
+
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+
+        const destinationX = x + (Math.random() - 0.5) * 2 * 75;
+        const destinationY = y + (Math.random() - 0.5) * 2 * 75;
+
+        switch (type) {
+            case "square":
+                particle.style.background = `hsl(${Math.random() * 90 + 270}, 70%, 60%)`;
+                particle.style.border = "1px solid white";
+                break;
+            case "circle":
+                particle.style.background = `hsl(${Math.random() * 90 + 180}, 70%, 60%)`;
+                particle.style.borderRadius = "50%";
+                break;
+            default:
+                particle.style.background = `hsl(${Math.random() * 90 + 180}, 70%, 60%)`;
+        }
+
+        const animation = particle.animate(
+            [
+                {
+                    // Set the origin position of the particle
+                    // We offset the particle with half its size to center it around the mouse
+                    transform: `translate(${x - size / 2}px, ${y - size / 2}px)`,
+                    opacity: 1,
+                },
+                {
+                    // We define the final coordinates as the second keyframe
+                    transform: `translate(${destinationX}px, ${destinationY}px)`,
+                    opacity: 0,
+                },
+            ],
+            {
+                duration: 500 + Math.random() * 1000,
+                easing: "cubic-bezier(0, .9, .57, 1)",
+                delay: Math.random() * 200,
+            }
+        );
+
+        animation.onfinish = () => {
+            particle.removeParticle;
+        };
+    }
+
+    function removeParticle(e) {
+        e.srcElement.effect.target.remove();
+    }
+
+</script>
+
+</html>

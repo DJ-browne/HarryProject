@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Diagon Alley</title>
+  <link rel="stylesheet" href="./cart.css" />
+  <link rel="icon" type="image/x-icon" href="thun.png">
+</head>
+<style></style>
+
+<body>
+  <div class="main">
+    <div id="main_banner">
+      <a href="hp_mainPage.html">
+        <h1>Diagon Alley</h1>
+      </a>
+    </div>
+
+    <div class="bigMenu">
+
+      <div class="menu_left">
+
+        <div class="menu-item">
+          <a href="hp_clothes2.html" id="a1"> Clothes </a>
+        </div>
+
+        <div class="menu-item">
+          <a href="hp_wands.html" id="a2"> Wands </a>
+        </div>
+
+        <div class="menu-item">
+          <a href="hp_brooms.html" id="a3"> Brooms </a>
+        </div>
+
+        <div class="menu-item">
+          <a href="hp_cart.html" id="a4"> Cart </a>
+        </div>
+      </div>
+
+      <div class="menu_right">
+
+        <div class="right_top">
+
+
+          <div class="btn_all">
+            <button onclick="selectAll()" name="checkAll" id="checkAll">Select All</button>
+          </div>
+
+          <div class="btn_top">
+            <button onclick="clearCart()">Clear cart</button>
+          </div>
+
+
+
+          <div class="item_row">
+
+            <table class="cart_table">
+              <tr id="cartItems">
+
+              </tr>
+            </table>
+
+          </div>
+
+        </div>
+
+
+        <div class="right_bot">
+
+          <div class="buy">
+            <button onclick="purchaseItems()" name="buyItems" id="buyItems">PURCHASE</button>
+          </div>
+
+          <div class="item_row">
+            <p id="copyR">Copyrightⓒ 2023.Yaewon&Dayeon.All rights reserved.</p>
+          </div>
+
+        </div>
+
+
+      </div>
+
+</body>
+
+<script>
+
+
+  function purchaseItems() {
+
+    //Check if any input is checked before proceeding
+    const allInputCheckboxes = document.getElementsByClassName('checkRow');
+
+    let atleastOneChecked = false;
+
+    for (var i = 0; i < allInputCheckboxes.length; i++) {
+       if(allInputCheckboxes[i].checked){
+        atleastOneChecked = true;
+        break;
+       }
+    }
+
+    if (!atleastOneChecked) {
+      alert("Please select at least one item to purchase");
+      return;
+    }
+
+    let retrievedCart = JSON.parse(localStorage.getItem("harryPotterCart"));
+
+    for (let i = 0; i < retrievedCart.length; i++) {
+
+      let inputAssociatedWithItem = document.getElementsByName(retrievedCart[i].name + " " + "input");
+
+      if (inputAssociatedWithItem[0].checked) {
+        retrievedCart[i].hasBeenPurchased = true;
+      }
+    }
+
+
+    if (confirm("You wanna buy?")) {
+
+      let updatedCartAfterCheckout = [];
+
+      retrievedCart.forEach((element, index) => {
+        if (!element.hasBeenPurchased) {
+          //Remove the item from the cart
+          updatedCartAfterCheckout.push(element);
+        }
+      });
+
+      if (updatedCartAfterCheckout.length > 0) {
+        localStorage.setItem("harryPotterCart", JSON.stringify(updatedCartAfterCheckout));
+      } else {
+        localStorage.removeItem("harryPotterCart");
+      }
+
+
+      location.href = "hp_buy.html";
+    }
+  };
+
+
+
+  let areItemsChecked = false;
+
+  function selectAll() {
+
+    let checkedArr = document.getElementsByClassName('checkRow');
+    if (areItemsChecked) {
+      for (let checked of checkedArr) {
+        checked.checked = false;
+      }
+      areItemsChecked = false;
+    }
+    else {
+      for (let checked of checkedArr) {
+        checked.checked = true;
+      }
+      areItemsChecked = true;
+    }
+  };
+
+
+
+  function clearCart() {
+
+    // 선택된 대상을 가진 배열
+    let checkedArr = document.getElementsByClassName('checkRow');
+
+    // 현재 장바구니에 있는 데이터
+    let retrievedCart = JSON.parse(localStorage.getItem("harryPotterCart"));
+
+    let updatedCart = [];
+
+    for (let i = 0; i < retrievedCart.length; i++) {
+
+      if (!(checkedArr[i].checked)) {
+        updatedCart.push(retrievedCart[i]);
+      }
+    }
+    
+
+    localStorage.setItem("harryPotterCart", JSON.stringify(updatedCart));
+
+    location.reload();
+
+  }
+
+  function incrementItem(item) {
+    let retrievedCart = JSON.parse(localStorage.getItem("harryPotterCart"));
+
+    const index = retrievedCart.map((e) => e.name).indexOf(item.name);
+
+    //Update the item count within the object
+    retrievedCart[index].itemsCount += 1;
+
+    localStorage.setItem("harryPotterCart", JSON.stringify(retrievedCart));
+
+    let elementToIncrement = document.getElementById(item.name);
+
+    let incrementedCount = parseInt(elementToIncrement.innerHTML)
+
+    incrementedCount += 1;
+
+    elementToIncrement.innerHTML = incrementedCount;
+
+    let totalSpanToIncrement = document.getElementById("cart_total");
+
+    // console.log(totalSpanToIncrement)
+
+    let total = parseInt(totalSpanToIncrement.innerHTML);
+
+    let updatedTotal = total + item.price;
+
+    totalSpanToIncrement.innerHTML = updatedTotal;
+
+    if (incrementedCount > 1) {
+      let buttonToEnable = document.getElementById(`${item.name}_decrement_btn`);
+
+      buttonToEnable.style.display = 'block';
+    }
+  }
+
+  function decrementItem(item) {
+    let retrievedCart = JSON.parse(localStorage.getItem("harryPotterCart"));
+
+    const index = retrievedCart.map((e) => e.name).indexOf(item.name);
+
+    //Update the item count within the object
+    retrievedCart[index].itemsCount -= 1;
+
+    localStorage.setItem("harryPotterCart", JSON.stringify(retrievedCart));
+
+    let elementToDecrement = document.getElementById(item.name);
+
+    let decrementedCount = parseInt(elementToDecrement.innerHTML)
+
+    decrementedCount -= 1;
+
+    elementToDecrement.innerHTML = decrementedCount;
+
+    let totalSpanToDecrement = document.getElementById("cart_total");
+
+    let total = parseInt(totalSpanToDecrement.innerHTML);
+
+    let updatedTotal = total - item.price;
+
+    totalSpanToDecrement.innerHTML = updatedTotal;
+
+    if (decrementedCount <= 1) {
+      let buttonToDisable = document.getElementById(`${item.name}_decrement_btn`);
+      buttonToDisable.style.display = 'none';
+    }
+  }
+
+
+  document.addEventListener("DOMContentLoaded", function () {
+    
+    let menu_right = document.getElementsByClassName("menu_right");
+    menu_right[0].style.display = "none";
+
+    // Retrieve the object from storage
+    let retrievedCart = JSON.parse(localStorage.getItem("harryPotterCart"));
+   
+    
+    if(retrievedCart == null){
+      menu_right[0].style.display = "none";
+
+    }else{
+      menu_right[0].style.display = "flex";
+    }
+
+    let tr = document.getElementById("cartItems");
+    //Once we have cart from storage,
+    //we can loop through it and render in <ul>
+
+    const cartItemsArray = retrievedCart;
+
+    // console.log(cartItemsArray);
+
+    let total = 0;
+
+    cartItemsArray.forEach((element) => {
+
+      let td = document.createElement("td");
+      // let input = document.createElement('input');
+      // input.setAttribute("type", "radio");
+
+      var div1 = document.createElement('div');
+      var div2 = document.createElement('div');
+
+
+      let incrementButton = document.createElement('button')
+      incrementButton.setAttribute("type", "button")
+      incrementButton.setAttribute("class", "incrementButton")
+      incrementButton.setAttribute("id", `${element.name}_increment_btn`)
+      incrementButton.style.marginRight = '20px'
+      incrementButton.innerHTML = "Add another";
+      incrementButton.onclick = function () { incrementItem(element) };
+
+      let decrementButton = document.createElement('button')
+      decrementButton.setAttribute("type", "button")
+      decrementButton.setAttribute("id", `${element.name}_decrement_btn`)
+      decrementButton.setAttribute("class", "decrementButton")
+      decrementButton.innerHTML = "Remove one";
+      decrementButton.onclick = function () { decrementItem(element) };
+
+      let input = document.createElement('input');
+      // let label = document.createElement('label');
+      // label.htmlFor = 'checkRow';
+      input.setAttribute("type", "checkbox")
+      input.setAttribute("name", element.name + " " + 'input')
+      input.setAttribute("class", "checkRow")
+      input.setAttribute("id", "checkRow")
+
+      // input.setAttribute()
+      div1.appendChild(input)
+      // div1.appendChild(label)
+
+      let countspanTag = document.createElement('span');
+      countspanTag.style.display = 'inline';
+      countspanTag.setAttribute("id", element.name)
+      countspanTag.style.marginRight = '10px';
+      countspanTag.innerHTML = element.itemsCount;
+
+      let contentSpanTag = document.createElement('span');
+      contentSpanTag.style.display = 'inline';
+      contentSpanTag.style.textAlign = 'left';
+      contentSpanTag.style.marginRight = 'auto';
+      contentSpanTag.innerHTML = " x " + element.name + " : " + element.price + " galleons";
+
+      // td.appendChild(input)
+
+      div1.appendChild(countspanTag);
+      div1.appendChild(contentSpanTag);
+
+
+
+      let _img = document.createElement("img");
+      _img.src = element.image;
+      _img.style.width = "150px";
+      _img.style.height = "150px";
+
+      td.style.display = 'flex';
+      td.style.flexDirection = 'column';
+      div1.style.display = 'flex';
+
+      div1.appendChild(_img);
+
+      td.appendChild(div1);
+
+      div2.style.display = 'flex';
+      div2.style.justifyContent = 'flex-end';
+      div2.style.marginTop = '30px';
+      div2.appendChild(incrementButton)
+
+      decrementButton.style.display = 'none';
+
+      if (element.itemsCount > 1) {
+        decrementButton.style.display = 'block';
+      }
+
+      div2.appendChild(decrementButton)
+      td.appendChild(div2);
+
+      tr.appendChild(td);
+
+
+
+      total += element.price * element.itemsCount;
+    });
+
+    let td = document.createElement("td");
+
+    let totalCostTextSpan = document.createElement('span');
+    totalCostTextSpan.style.display = 'inline';
+    totalCostTextSpan.style.marginRight = '10px';
+    totalCostTextSpan.innerHTML = "Total cost of cart : ";
+
+    let totalSpan = document.createElement('span');
+    totalSpan.style.display = 'inline';
+    totalSpan.setAttribute("id", "cart_total")
+    totalSpan.style.marginRight = '10px';
+    totalSpan.innerHTML = total;
+
+    let galleonsTextSpan = document.createElement('span');
+    galleonsTextSpan.style.display = 'inline';
+    galleonsTextSpan.innerHTML = " galleons";
+
+    td.style.display = 'flex';
+    td.style.justifyContent = 'center';
+
+    if (cartItemsArray.length >= 1) {
+      td.appendChild(totalCostTextSpan);
+      td.appendChild(totalSpan)
+      td.appendChild(galleonsTextSpan)
+      tr.appendChild(td);
+    }
+
+  });
+
+</script>
+
+</html>

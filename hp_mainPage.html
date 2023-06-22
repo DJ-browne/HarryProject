@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Diagon Alley</title>
+    <link rel="stylesheet" href="./mainPage.css" />
+    <link rel="icon" type="image/x-icon" href="thun.png">
+</head>
+<style></style>
+
+<body >
+    <div class="main">
+
+        <div id="main_banner">
+            <a href="hp_Menu.html"><h1>Diagon Alley</h1></a>
+        </div>
+
+        <div class="bigMenu">
+
+            <div class="menu_left">
+                <div class="menu-item">
+                    <a href="hp_clothes2.html" id="a1"> Clothes </a>
+                </div>
+
+                <div class="menu-item">
+                    <a href="hp_wands.html" id="a2"> Wands </a>
+                </div>
+
+                <div class="menu-item">
+                    <a href="hp_brooms.html" id="a3"> Brooms </a>
+                </div>
+
+                <div class="menu-item">
+                    <a href="hp_cart.html" id="a4"> Cart </a>
+                </div>
+            </div>
+
+            <div class="menu_right">
+
+                <div class="item_row">
+
+                    <a href="hp_azkaban.html" id="a5">
+                        <img src="hogwarts_castle.gif"></a>
+
+                </div>
+
+                <div class="copyright">
+                    <p>Copyrightⓒ 2023.Yaewon&Dayeon.All rights reserved.</p>
+                </div>
+
+            </div>
+
+        </div>
+
+</body>
+
+<script>
+   
+
+    function addToCart(item) {
+        const existingCart = JSON.parse(localStorage.getItem("harryPotterCart"));
+
+        let updatedCart;
+
+        if (existingCart === null) {
+            updatedCart = [item];
+        } else {
+            updatedCart = [...existingCart, item];
+        }
+
+        // Put the object into storage
+        localStorage.setItem("harryPotterCart", JSON.stringify(updatedCart));
+
+
+    }
+</script>
+
+</html>

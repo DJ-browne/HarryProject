@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Diagon Alley</title>
+    <link rel="stylesheet" href="./brooms.css" />
+    <link rel="icon" type="image/x-icon" href="thun.png">
+</head>
+<style></style>
+
+<body>
+    <div class="main">
+        <div id="main_banner">
+          <a href="hp_mainPage.html"><h1>Diagon Alley</h1></a>
+        </div>
+        <div class="bigMenu">
+            <div class="menu_left">
+                <div class="menu-item">
+                    <a href="hp_clothes2.html" id="a1"> Clothes </a>
+                </div>
+
+                <div class="menu-item">
+                    <a href="hp_wands.html" id="a2"> Wands </a>
+                </div>
+
+                <div class="menu-item">
+                    <a href="hp_brooms.html" id="a3"> Brooms </a>
+                </div>
+
+                <div class="menu-item">
+                    <a href="hp_cart.html" id="a4"> Cart </a>
+                </div>
+            </div>
+
+            <div class="menu_right">
+                <div class="item_row">
+
+                    <div class="broom1">
+                        <a onclick="addToCart({
+                name: 'Nimbus 2000',
+                price: 100,
+                image: 'Nimbus2000.png'
+              })">
+                            <img src="Nimbus2000.png">
+                            <p>Nimbus 2000</p>
+                            <p>100 Galleon</p>
+                        </a>
+                    </div>
+
+                    <div class="item_row">
+
+                        <div class="broom2">
+                            <a onclick="addToCart({
+                name: 'Nimbus 2001',
+                price: 135,
+                image: 'Nimbus2001.png'
+              })">
+                                <img src="Nimbus2001.png">
+                                <p>Nimbus 2001</p>
+                                <p>135 Galleon</p>
+                            </a>
+                        </div>
+
+                        <div class="item_row">
+                            
+                            <div class="broom3">
+                                <a onclick="addToCart({
+                    name: 'Fire Bolt',
+                    price: 150,
+                    image: 'Firebolt.png'
+                  })">
+                                    <img src="Firebolt.png">
+                                    <p id="fire">Fire Bolt</p>
+                                    <p>150 Galleon</p>
+                                </a>
+                            </div>
+
+
+                            <div class="item_row">
+                                <p id="copyR">Copyrightⓒ 2023.Yaewon&Dayeon.All rights reserved.</p>
+                            </div>
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+</body>
+
+<script>
+  
+    
+    function addToCart(item) {
+      let b = confirm("You gon' keep it or what");
+
+      if (b) {
+        //Get existing cart from local storage
+        const existingCart = JSON.parse(
+          localStorage.getItem("harryPotterCart")
+        );
+
+        let updatedCart;
+
+        //If card does not exists (e.g. first item in cart)
+        if (existingCart === null) {
+          //Setup new item to be stored
+          const storedItem = {
+            name: item.name,
+            image: item.image,
+            price: item.price,
+            itemsCount: 1,
+          };
+
+          //Add item to updatedCard variable
+
+          updatedCart = [storedItem];
+        }
+        //Else the cart already exists (e.g. its items 2, 3, 4 etc)
+        else {
+          //Check if item name exists already in cart (e.g. Slytherin Package)
+
+          //This code returns undefined if the item does NOT exists
+          var itemInCart = existingCart.find((obj) => {
+            return obj.name === item.name;
+          });
+
+          // 저장된 장바구니 배열에서 등록된 정보의 이름하고 새로 등록된 정보의 이름이
+          // 같으면 그 같은 이름을 새 변수 itemInCart에 대입함
+
+          //If item name already exists..
+          if (itemInCart) {
+            // 리턴값이 있으면 즉 같은 이름이 이미 장바구니 배열에 있던거면
+            //If item exists, find the index of that item in the cart array
+            const index = existingCart.map((e) => e.name).indexOf(item.name);
+             
+            // existingCart.map((e)=>e.name); existingCart 배열안에 있는 요소들의 이름을 리턴
+            // ex> [grif packaga, sly pack, nimsbus] 얘네중에 새로클릭된아이템의 이름이 있는
+            // 인덱스 번호를 찾아서 index 변수에 저장 
+            // ex> 새로 들어온게 grif pac 이면 원래있던 애가 있던 index 0번째가 선택될거고
+            // 이걸 다시 새 변수 index에 넣는다
+
+            //Update the item count within the object
+            existingCart[index].itemsCount += 1;
+            // 똑같은게 똑같은 인덱스로 들어왔으니 갯수를 늘린다
+
+            updatedCart = [...existingCart];
+          } else {
+            //Else the item is not in the existing cart, we create brand new object for the first addition of that item
+            const storedItem = {
+              name: item.name,
+              image: item.image,
+              price: item.price,
+              itemsCount: 1,
+            };
+            updatedCart = [...existingCart, storedItem];
+          }
+        }
+
+        // Put the object into storage
+        localStorage.setItem("harryPotterCart", JSON.stringify(updatedCart));
+      }
+    }
+</script>
+
+</html>
+
+
+
